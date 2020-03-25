@@ -128,6 +128,12 @@ class Game extends React.Component {
 
 // ========================================
 
+// socket.io stuff will go below
+// pass state from socket.io in the Game and
+//  1. on connection
+//  2. on any state changel
+// a callback to fire actions
+
 ReactDOM.render(
   <Game />,
   document.getElementById('root')

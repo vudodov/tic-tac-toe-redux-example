@@ -1,0 +1,17 @@
+{
+  "name": "tic-tac-toe-back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "type": "module",
+  "author": "Valerii Udodov <vudodov@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "immutable": "^4.0.0-rc.12",
+    "redux": "^4.0.5",
+    "socket.io": "^2.3.0"
+  }
+}
