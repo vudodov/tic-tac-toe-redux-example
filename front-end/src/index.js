@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import io from 'socket.io-client';
+
 import './index.css';
 
 function Square(props) {
@@ -10,7 +12,7 @@ function Square(props) {
   );
 }
 
-class Board extends React.Component {
+class Board extends React.PureComponent {
   renderSquare(i) {
     return (
       <Square 
@@ -44,58 +46,26 @@ class Board extends React.Component {
   }
 }
 
-class Game extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      history: [{
-        squares: Array(9).fill(null),
-      }],
-      stepNumber: 0,
-      xIsNext: true,
-    };
-  }
+class Game extends React.PureComponent {
 
   jumpTo(step) {
-    this.setState({
-      stepNumber: step,
-      xIsNext: (step % 2) === 0,
-    });
+    this.props.dispatch({type: 'JUMP_TO_STEP', step});
   }
 
   reset() {
-    this.setState({
-      stepNumber: 0,
-      xIsNext: true,
-    });
+    this.props.dispatch({type: 'RESET'});
   }
 
-  handleClick(i) {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const current = history[history.length - 1];
-    const squares = current.squares.slice();
-    
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
-    this.setState({
-      history: history.concat([{
-        squares: squares,
-      }]),
-      stepNumber: history.length,
-      xIsNext: !this.state.xIsNext
-    });
+  handleClick(boxIndex) {
+    this.props.dispatch({type: 'PERFORM_MOVE', boxIndex: boxIndex})
   }
 
   render() {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
-    const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
-    const status = winner 
+    const { history, stepNumber, xIsNext, winner } = this.props.gameState
+    const current = history[stepNumber];
+    const status = winner
       ? 'Winner: ' + winner
-      : 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      : 'Next player: ' + (xIsNext ? 'X' : 'O');
 
       const moves = history.map((step, move) => {
         const desc = move ?
@@ -126,35 +96,13 @@ class Game extends React.Component {
   }
 }
 
-// ========================================
-
-// socket.io stuff will go below
-// pass state from socket.io in the Game and
-//  1. on connection
-//  2. on any state changel
-// a callback to fire actions
-
-ReactDOM.render(
-  <Game />,
-  document.getElementById('root')
+const socket = io("http://localhost:8090");
+socket.on('state-change', state =>
+  ReactDOM.render(
+    <Game 
+      dispatch={(action) => socket.emit('action', action)}
+      gameState={state}
+    />,
+    document.getElementById('root')
+  )
 );
-
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
-}
