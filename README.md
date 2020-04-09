@@ -8,7 +8,7 @@ In a course of three articles, I have proposed a hypothesis, that Redux might be
 If it is something that sounds appealing, please make yourself familiar with the series.
  1. [Server-side Redux. Part I. The Redux.](https://valerii-udodov.com/server-side-redux-the-redux/) predominantly focuses on the state distribution in the Redux and classical React applications.
  2. [Server-side Redux. Part II. The Design.](https://valerii-udodov.com/server-side-redux-the-design/) this article is where we assembling the design and answering the question when and why it would make sense to use Redux on the back-end
- 3. [Server-side Redux. Part III. The Code.](https://valerii-udodov.com/server-side-redux-the-design/) this article is a step-by-step implementation of the proposed design concept. Part III is the main reason this repository exists.
+ 3. [Server-side Redux. Part III. The Code.](https://valerii-udodov.com/server-side-redux-the-code/) this article is a step-by-step implementation of the proposed design concept. Part III is the main reason this repository exists.
 
 ## Design
 Here's a brief walk through the design, please reference Part II for more details.
