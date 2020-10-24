@@ -1,6 +1,6 @@
-import redux from 'redux';
+import { createStore } from 'redux';
 import server from './src/server.js';
 import reducer from './src/reducer.js';
 
-const store = redux.createStore(reducer);
+const store = createStore(reducer);
 server.startServer(store);
