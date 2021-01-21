@@ -12,6 +12,6 @@
   "dependencies": {
     "immutable": "^4.0.0-rc.12",
     "redux": "^4.0.5",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   }
 }
